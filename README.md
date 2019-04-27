@@ -1,4 +1,4 @@
-# HearthstoneDiscordRichPresence
+# Hearthstone Discord Rich Presence
 
 This plugins shows live game information on Discord.
 
