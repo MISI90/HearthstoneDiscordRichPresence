@@ -1,6 +1,6 @@
 # Hearthstone Discord Rich Presence
 
-This plugins shows live game information on Discord.
+This plugins shows live game information on Discord. It requires [Hearthstone Deck Tracker](https://hsreplay.net/downloads/) to work.
 
 Latest release can be found here: https://github.com/MISI90/HearthstoneDiscordRichPresence/releases/latest
 
