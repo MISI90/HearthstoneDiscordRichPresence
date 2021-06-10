@@ -506,7 +506,7 @@ namespace HearthstoneDiscordRichPresence
             }
             else
             {
-                return ranks[(medalInfo.StarLevel ?? default(int)) / 10] + " " + (11 - medalInfo.StarLevel % 10) + ", " + medalInfo.Stars + " Star" + (medalInfo.Stars != 1 ? "s" : "");
+                return ranks[(medalInfo.StarLevel ?? default(int)) / 10] + " " + (11 - medalInfo.StarLevel % 10) + " - " + medalInfo.Stars + " Star" + (medalInfo.Stars != 1 ? "s" : "");
 
             }
         }
