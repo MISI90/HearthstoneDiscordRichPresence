@@ -428,7 +428,7 @@ namespace HearthstoneDiscordRichPresence
                         toptext = "Playing against an AI";
                         break;
                     case GameMode.Spectator:
-                        toptext = "Playing a Casual Game";
+                        toptext = "Spectating a Game";  // TODO: More here
                         break;
                     case GameMode.Duels:
                         toptext = "Partaking in a Duel";
@@ -461,14 +461,18 @@ namespace HearthstoneDiscordRichPresence
         {
             if (currentGameMode == GameMode.Ranked)
             {
+                string medalInfo;
                 switch (currentFormat)
                 {
                     case Format.Standard:
-                        return "Standard " + InterpretMedalInfo(Core.Game.MatchInfo.LocalPlayer.Standard);
+                        medalInfo = InterpretMedalInfo(Core.Game.MatchInfo?.LocalPlayer?.Standard);
+                        return "Standard" + (!string.IsNullOrEmpty(medalInfo) ? " " + medalInfo : "");
                     case Format.Wild:
-                        return "Wild " + InterpretMedalInfo(Core.Game.MatchInfo.LocalPlayer.Wild);
+                        medalInfo = InterpretMedalInfo(Core.Game.MatchInfo?.LocalPlayer?.Wild);
+                        return "Wild" + (!string.IsNullOrEmpty(medalInfo) ? " " + medalInfo : "");
                     case Format.Classic:
-                        return "Classic " + InterpretMedalInfo(Core.Game.MatchInfo.LocalPlayer.Classic);
+                        medalInfo = InterpretMedalInfo(Core.Game.MatchInfo?.LocalPlayer?.Classic);
+                        return "Classic" + (!string.IsNullOrEmpty(medalInfo) ? " " + medalInfo : "");
                     default:
                         return "";
                 }
@@ -500,15 +504,24 @@ namespace HearthstoneDiscordRichPresence
 
         private static string InterpretMedalInfo(HearthMirror.Objects.MatchInfo.MedalInfo medalInfo)
         {
+            if (medalInfo == null)
+            {
+                return "";
+            }
             if (medalInfo.LegendRank > 0)
             {
                 return "Legend " + medalInfo.LegendRank;
             }
             else
             {
-                return ranks[(medalInfo.StarLevel ?? default(int)) / 10] + " " + (11 - medalInfo.StarLevel % 10) + " - " + medalInfo.Stars + " Star" + (medalInfo.Stars != 1 ? "s" : "");
+                return ranks[((medalInfo.StarLevel ?? default) - 1) / 10] + " " + (1 + mod(11 - (medalInfo.StarLevel ?? default) - 1, 10)) + " - " + medalInfo.Stars + " Star" + (medalInfo.Stars != 1 ? "s" : "");
 
             }
+        }
+
+        private static int mod(int x, int m)
+        {
+            return (x % m + m) % m;
         }
 
         private static void UpdatePresenceShort(string detail, string smallIcon = "", string smallText = "")
