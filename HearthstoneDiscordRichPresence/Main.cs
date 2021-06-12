@@ -355,7 +355,7 @@ namespace HearthstoneDiscordRichPresence
                     {
                         if (!string.IsNullOrEmpty(Core.Game.Player.Class) && !string.IsNullOrEmpty(Core.Game.Opponent.Class))
                         {
-                            string state = Core.Game.Player.Class + " vs. " + Core.Game.Opponent.Class;
+                            string state = GetClassFromPlayer(Core.Game.Player) + " vs. " + GetClassFromPlayer(Core.Game.Opponent);
                             if (Core.Game.GetTurnNumber() > 0)
                             {
                                 state += " - Turn " + Core.Game.GetTurnNumber();
@@ -457,6 +457,17 @@ namespace HearthstoneDiscordRichPresence
             }
         }
 
+        private static string GetClassFromPlayer(Player player)
+        {
+            string className = player.Class;
+            if (className.Contains("DemonHunter"))
+            {
+                int startIndex = className.IndexOf("Hunter");
+                className = className.Substring(0, startIndex) + " " + className.Substring(startIndex);  // Inserts a space inside "DemonHunter" no matter where it appears in the string
+            }
+            return className;
+        }
+
         private static string GetRank(Format? currentFormat, GameMode currentGameMode)
         {
             if (currentGameMode == GameMode.Ranked)
@@ -515,7 +526,6 @@ namespace HearthstoneDiscordRichPresence
             else
             {
                 return ranks[((medalInfo.StarLevel ?? default) - 1) / 10] + " " + (1 + mod(11 - (medalInfo.StarLevel ?? default) - 1, 10)) + " - " + medalInfo.Stars + " Star" + (medalInfo.Stars != 1 ? "s" : "");
-
             }
         }
 
